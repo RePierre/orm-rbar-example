@@ -30,7 +30,7 @@ namespace RbarExample.Services
             var customer = _customerRepository.Get(customerId);
             var customerOrder = new CustomerOrder(customer);
 
-            // Hack: There is an issue with EF Core not properly processing the join statement. 
+            // Hack: There is an issue with EF Core not properly processing the join statement.
             var itemIds = orderItems.Select(i => i.ItemId).Distinct();
             var items = _itemRepository.Items
                 .Where(i => itemIds.Contains(i.Id))
@@ -44,6 +44,7 @@ namespace RbarExample.Services
             {
                 var item = items[orderedItem.ItemId];
                 item.DecreaseStockCount(orderedItem.Quantity);
+		_itemRepository.Update(item);
                 customerOrder.Add(orderedItem);
             }
 
